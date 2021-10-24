@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.swissborgtest.network.BitfinexClient
+import com.example.swissborgtest.repository.BitfinexRepository
 import com.example.swissborgtest.ui.main.MainFragment
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -13,28 +14,28 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var bitfinexClient: BitfinexClient
+    lateinit var bitfinexRepository: BitfinexRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         Timber.d("onCreate")
         Log.d("MainActitivy", "create")
-//        if (savedInstanceState == null) {
-//            supportFragmentManager.beginTransaction()
-//                .replace(R.id.container, MainFragment.newInstance())
-//                .commitNow()
-//        }
-        bitfinexClient.getTicker().subscribe({
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, MainFragment.newInstance())
+                .commitNow()
+        }
+        bitfinexRepository.getTicker().subscribe({
             Timber.d("ticker=$it")
         }, {
-            it.printStackTrace()
+            Timber.e(it)
         })
 
-        bitfinexClient.getOrderBook().subscribe({
-            Timber.d("orderBook=$it")
+        bitfinexRepository.getOrderBook().subscribe({
+            Timber.d("orderBookSize=${it.size}")
         }, {
-            it.printStackTrace()
+            Timber.e(it)
         })
     }
 }

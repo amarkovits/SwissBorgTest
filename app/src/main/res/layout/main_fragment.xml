@@ -1,20 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.main.MainFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MainFragment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <variable
+            name="viewModel"
+            type="com.example.swissborgtest.ui.main.MainViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp"
+        tools:context=".ui.main.MainFragment">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <TextView
+            android:id="@+id/tickerTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/ticker_title"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tickerPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/price(viewModel.ticker.lastPrice)}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tickerTitle" />
+
+        <TextView
+            android:id="@+id/tickerVolume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/volume(viewModel.ticker.volume)}"
+            app:layout_constraintLeft_toRightOf="@id/center"
+            app:layout_constraintTop_toTopOf="@id/tickerPrice" />
+
+        <TextView
+            android:id="@+id/tickerLow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/low(viewModel.ticker.low)}"
+            app:layout_constraintLeft_toLeftOf="@id/tickerPrice"
+            app:layout_constraintTop_toBottomOf="@id/tickerPrice" />
+
+        <TextView
+            android:id="@+id/tickerHigh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/high(viewModel.ticker.high)}"
+            app:layout_constraintLeft_toLeftOf="@id/tickerPrice"
+            app:layout_constraintTop_toBottomOf="@id/tickerLow" />
+
+
+        <TextView
+            android:id="@+id/tickerChangeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/change_value(viewModel.ticker.dailyChange)}"
+            app:layout_constraintLeft_toLeftOf="@id/tickerVolume"
+            app:layout_constraintTop_toBottomOf="@id/tickerVolume" />
+
+        <TextView
+            android:id="@+id/tickerChangePercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/change_percent(viewModel.ticker.dailyChangePerc)}"
+            app:layout_constraintLeft_toLeftOf="@id/tickerVolume"
+            app:layout_constraintTop_toBottomOf="@id/tickerChangeValue" />
+
+
+        <TextView
+            android:id="@+id/orderBook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/orderbook_title"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/tickerHigh" />
+
+        <TextView
+            android:id="@+id/bid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Bid"
+            android:textColor="#00FF00"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="@id/center"
+            app:layout_constraintTop_toBottomOf="@id/orderBook" />
+
+        <TextView
+            android:id="@+id/ask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Ask"
+            android:textColor="#FF0000"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@id/center"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/orderBook" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/bidList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="@id/center"
+            app:layout_constraintTop_toBottomOf="@id/bid" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/askList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/center"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ask" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:background="#AAAAAA"
+            app:layout_constraintBottom_toBottomOf="@id/bidList"
+            app:layout_constraintLeft_toLeftOf="@id/center"
+            app:layout_constraintTop_toTopOf="@id/bidList" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

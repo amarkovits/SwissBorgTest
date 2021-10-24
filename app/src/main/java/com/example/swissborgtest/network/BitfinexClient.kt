@@ -34,7 +34,7 @@ class BitfinexClient @Inject constructor(private val bitfinexService: BitfinexSe
         }
     }
 
-    fun getOrderBook(): Flowable<OrderBook> {
+    fun getOrderBook(): Flowable<OrderBookData> {
         bitfinexService.openWebSocket()
             .filter {
                 Timber.d("order event=$it")
@@ -52,10 +52,15 @@ class BitfinexClient @Inject constructor(private val bitfinexService: BitfinexSe
                 Timber.e(it)
             })
         return bitfinexService.observeOrderBook().filter {
-            Timber.d("entry=$it")
-            true
+            Timber.d("filter $it")
+            it.isOrderBookSetup() || it.isOrderBookUpdate()
         }.map {
-            it.toOrderBook()
+            Timber.d("map")
+            if (it.isOrderBookSetup()) {
+                it.toOrderBookSetup()
+            } else {
+                it.toOrderBookUpdate()
+            }
         }
     }
 

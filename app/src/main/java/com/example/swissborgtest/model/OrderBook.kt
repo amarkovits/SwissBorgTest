@@ -1,16 +1,15 @@
 package com.example.swissborgtest.model
 
 data class OrderBook(
-    private val precision: String,
-    private val frequency: String,
-    private val price: Float,
-    private val count: Int,
-    private val amount: Float,
-    private val length: String
+    val price: Double,
+    val count: Int,
+    val amount: Double,
 )
 
-fun FloatArray.toOrderBook(): OrderBook {
-    return OrderBook(
-        "", "", 0f, 0, 0f, ""
-    )
+fun Array<*>.toOrderBook(): OrderBook {
+    return OrderBook(get(1) as Double, (get(2) as Double).toInt(), get(3) as Double)
+}
+
+fun ArrayList<*>.toOrderBook(): OrderBook {
+    return OrderBook(get(0) as Double, (get(1) as Double).toInt(), get(2) as Double)
 }

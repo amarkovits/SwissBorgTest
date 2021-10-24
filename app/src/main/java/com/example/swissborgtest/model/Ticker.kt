@@ -21,12 +21,12 @@ fun Array<String>.toTicker(): Ticker {
         get(2).toFloat(),
         get(3).toFloat(),
         get(4).toFloat(),
-        get(4).toFloat(),
-        get(4).toFloat(),
-        get(4).toFloat(),
-        get(4).toFloat(),
-        get(4).toFloat(),
-        get(4).toFloat()
+        get(5).toFloat(),
+        get(6).toFloat(),
+        get(7).toFloat(),
+        get(8).toFloat(),
+        get(9).toFloat(),
+        get(10).toFloat()
     )
 }
 

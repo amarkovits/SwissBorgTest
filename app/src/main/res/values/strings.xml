@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">SwissBorgTest</string>
+
+    <string name="ticker_title">BTC-USD</string>
+    <string name="orderbook_title">Order Book</string>
+
+
+    <string name="price">Price: %.0f </string>
+    <string name="volume">Volume: %.4f </string>
+    <string name="high">High: %.0f</string>
+    <string name="low">Low: %.0f</string>
+    <string name="change_value">Change value: %.0f</string>
+    <string name="change_percent">Change percent: %.4f%%</string>
+
 </resources>

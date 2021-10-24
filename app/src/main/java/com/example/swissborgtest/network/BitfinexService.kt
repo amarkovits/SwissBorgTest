@@ -8,6 +8,7 @@ import com.tinder.scarlet.WebSocket
 import com.tinder.scarlet.ws.Receive
 import com.tinder.scarlet.ws.Send
 import io.reactivex.Flowable
+import java.util.*
 
 interface BitfinexService {
 
@@ -30,6 +31,6 @@ interface BitfinexService {
     fun sendOrderBookRequest(subscribeOrderBookRequest: OrderBookRequest)
 
     @Receive
-    fun observeOrderBook(): Flowable<FloatArray>
+    fun observeOrderBook(): Flowable<Array<*>>
 
 }
