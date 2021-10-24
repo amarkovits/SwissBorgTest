@@ -3,6 +3,7 @@ package com.example.swissborgtest.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import com.example.swissborgtest.model.OrderBook
 import com.example.swissborgtest.model.OrderBookData
 import com.example.swissborgtest.model.Ticker
@@ -24,8 +25,14 @@ class MainViewModel @Inject constructor(val bitfinexRespository: BitfinexReposit
         get() = _ticker
 
     private val _orderBooks = MutableLiveData<List<OrderBook>>()
-    val orderBooks: LiveData<List<OrderBook>>
-        get() = _orderBooks
+    val askOrderBooks: LiveData<List<OrderBook>>
+        get() = _orderBooks.map { list ->
+            list.filter { it.amount < 0 }.sortedBy { it.price }
+        }
+    val bidOrderBooks: LiveData<List<OrderBook>>
+        get() = _orderBooks.map { list ->
+            list.filter { it.amount > 0 }.sortedByDescending { it.price }
+        }
 
     init {
         compositeDisposable.add(

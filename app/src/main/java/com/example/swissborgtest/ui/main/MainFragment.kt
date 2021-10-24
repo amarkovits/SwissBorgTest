@@ -11,6 +11,7 @@ import com.example.swissborgtest.R
 import com.example.swissborgtest.databinding.MainFragmentBinding
 import com.example.swissborgtest.ui.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
@@ -22,6 +23,9 @@ class MainFragment : Fragment() {
     private val viewModel by viewModels<MainViewModel>()
 
     private var binding by autoCleared<MainFragmentBinding>()
+
+    private var askAdapter by autoCleared<OrderBookAdapter>()
+    private var bidAdapter by autoCleared<OrderBookAdapter>()
 
 
     override fun onCreateView(
@@ -36,10 +40,27 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupLists()
         observeOrderBook()
+
+    }
+
+    private fun setupLists(){
+        askAdapter = OrderBookAdapter()
+        binding.askList.adapter = askAdapter
+
+        bidAdapter = OrderBookAdapter()
+        binding.bidList.adapter = bidAdapter
     }
 
     private fun observeOrderBook(){
-
+        viewModel.askOrderBooks.observe(viewLifecycleOwner, {
+            Timber.d("submitList ${it.size}")
+            askAdapter.submitList(it)
+        })
+        viewModel.bidOrderBooks.observe(viewLifecycleOwner, {
+            bidAdapter.submitList(it)
+        })
     }
 }

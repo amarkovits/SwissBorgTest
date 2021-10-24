@@ -12,4 +12,7 @@
     <string name="change_value">Change value: %.0f</string>
     <string name="change_percent">Change percent: %.4f%%</string>
 
+    <string name="ob_price">%.0f</string>
+    <string name="ob_amount">%.8f</string>
+
 </resources>
