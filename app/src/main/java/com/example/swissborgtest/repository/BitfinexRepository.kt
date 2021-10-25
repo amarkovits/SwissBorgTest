@@ -5,6 +5,7 @@ import com.example.swissborgtest.model.OrderBookSetup
 import com.example.swissborgtest.model.OrderBookUpdate
 import com.example.swissborgtest.model.Ticker
 import com.example.swissborgtest.network.BitfinexClient
+import com.tinder.scarlet.WebSocket
 import io.reactivex.Flowable
 import java.util.*
 import java.util.concurrent.Flow
@@ -40,6 +41,11 @@ class BitfinexRepository @Inject constructor(private val bitfinexClient: Bitfine
 
     fun getTicker(): Flowable<Ticker> {
         return bitfinexClient.getTicker()
+    }
+
+    fun getConnected(): Flowable<Boolean> {
+        return bitfinexClient.getConnectionState()
+            .map { it is WebSocket.Event.OnConnectionOpened<*> }
     }
 
 }

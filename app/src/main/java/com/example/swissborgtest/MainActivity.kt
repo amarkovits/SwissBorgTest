@@ -26,16 +26,5 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.container, MainFragment.newInstance())
                 .commitNow()
         }
-        bitfinexRepository.getTicker().subscribe({
-            Timber.d("ticker=$it")
-        }, {
-            Timber.e(it)
-        })
-
-        bitfinexRepository.getOrderBook().subscribe({
-            Timber.d("orderBookSize=${it.size}")
-        }, {
-            Timber.e(it)
-        })
     }
 }

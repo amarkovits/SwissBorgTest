@@ -56,7 +56,6 @@ class MainFragment : Fragment() {
 
     private fun observeOrderBook(){
         viewModel.askOrderBooks.observe(viewLifecycleOwner, {
-            Timber.d("submitList ${it.size}")
             askAdapter.submitList(it)
         })
         viewModel.bidOrderBooks.observe(viewLifecycleOwner, {

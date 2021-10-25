@@ -9,6 +9,7 @@ import com.example.swissborgtest.model.OrderBookData
 import com.example.swissborgtest.model.Ticker
 import com.example.swissborgtest.network.BitfinexClient
 import com.example.swissborgtest.repository.BitfinexRepository
+import com.tinder.scarlet.WebSocket
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -16,7 +17,9 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(val bitfinexRespository: BitfinexRepository) : ViewModel() {
+class MainViewModel @Inject constructor(
+    private val bitfinexRespository: BitfinexRepository
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -34,6 +37,10 @@ class MainViewModel @Inject constructor(val bitfinexRespository: BitfinexReposit
             list.filter { it.amount > 0 }.sortedByDescending { it.price }
         }
 
+    private val _connected = MutableLiveData<Boolean>()
+    val connected: LiveData<Boolean>
+        get() = _connected
+
     init {
         compositeDisposable.add(
             bitfinexRespository.getOrderBook().subscribe({
@@ -49,10 +56,18 @@ class MainViewModel @Inject constructor(val bitfinexRespository: BitfinexReposit
                 Timber.e(it)
             })
         )
+        compositeDisposable.add(
+            bitfinexRespository.getConnected().subscribe({
+                _connected.postValue(it)
+            }, {
+                Timber.e(it)
+            })
+        )
     }
 
     override fun onCleared() {
         super.onCleared()
+        Timber.d("onCleared")
         compositeDisposable.clear()
     }
 

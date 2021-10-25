@@ -13,11 +13,10 @@ class BitfinexClient @Inject constructor(private val bitfinexService: BitfinexSe
     fun getTicker(): Flowable<Ticker> {
         bitfinexService.openWebSocket()
             .filter {
-                Timber.d("ticker event=$it")
                 it is WebSocket.Event.OnConnectionOpened<*>
             }
             .subscribe({
-                Timber.d("socket opened")
+                Timber.d("connected")
                 val request = TickerRequest(
                     "subscribe",
                     "ticker",
@@ -37,11 +36,9 @@ class BitfinexClient @Inject constructor(private val bitfinexService: BitfinexSe
     fun getOrderBook(): Flowable<OrderBookData> {
         bitfinexService.openWebSocket()
             .filter {
-                Timber.d("order event=$it")
                 it is WebSocket.Event.OnConnectionOpened<*>
             }
             .subscribe({
-                Timber.d("socket opened")
                 val request = OrderBookRequest(
                     "subscribe",
                     "book",
@@ -52,16 +49,22 @@ class BitfinexClient @Inject constructor(private val bitfinexService: BitfinexSe
                 Timber.e(it)
             })
         return bitfinexService.observeOrderBook().filter {
-            Timber.d("filter $it")
             it.isOrderBookSetup() || it.isOrderBookUpdate()
         }.map {
-            Timber.d("map")
             if (it.isOrderBookSetup()) {
                 it.toOrderBookSetup()
             } else {
                 it.toOrderBookUpdate()
             }
         }
+    }
+
+    fun getConnectionState(): Flowable<WebSocket.Event> {
+        return bitfinexService.openWebSocket()
+            .filter {
+                Timber.d("event=$it")
+                it !is WebSocket.Event.OnMessageReceived
+            }
     }
 
 }
